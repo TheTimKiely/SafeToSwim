@@ -18,8 +18,28 @@ from distutils.core import setup
 
 setup(
     name='SafeToSwim',
-    version='0.1dev',
-    packages=['safetoswim',],
+    author='Tim Kiely',
+    classifiers=
+    [
+        'Development Status :: 3 - Alpha',
+        'Topic :: Scientific/Engineering :: Artificial Intelligence',
+        'Topic :: Scientific/Engineering :: Image Recognition',
+        'Topic :: Scientific/Engineering :: GIS',
+        'Programming Language :: Python :: 3.6',
+        'License :: OSI Approved :: Apache Software License'
+    ],
+    keywords='binaryclassifier machinelearning deeplearning',
+    python_requires='>=3',
+    version='0.1.3a1',
+    packages=['safetoswim'],
+    install_requires=['rembrandtml'],
     license='Apache License 2.0',
     long_description=open('README.md').read(),
+    entry_points=
+    {
+        'console_scripts':
+            [
+                'safetoswim=safetoswim.__main__:main'
+            ]
+    }
 )
