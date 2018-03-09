@@ -1,3 +1,12 @@
+import argparse
+
+import numpy as np
+
+from rembrandtml.configuration import DataConfig, ModelConfig, ContextConfig, VisualizationConfig
+from rembrandtml.factories import ContextFactory
+from rembrandtml.visualization import Visualizer
+from rembrandtml.models import ModelType
+from sklearn.metrics import roc_curve, auc
 
 
 def main(args=None):
@@ -73,4 +82,5 @@ def main(args=None):
 
 
 if __name__ == '__main__':
-    main()
+    args = ('p', 'true')
+    main(args)
