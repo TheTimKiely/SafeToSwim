@@ -14,7 +14,7 @@ def prepare_image(image, img_size):
     if image.mode != 'RGB':
         image = image.convert('RGB ')
 
-    image = image.reszie(img_size)
+    image = image.resize(img_size)
     image = img_to_array(image)
     image = np.expand_dims(image, axis=0)
     image = imagenet_utils.preprocess_input(image)
