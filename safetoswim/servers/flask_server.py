@@ -5,7 +5,15 @@ from keras import models
 from PIL import Image
 import numpy as np
 import flask
-import io
+import os, io
+
+# initialize our Flask application and the Keras model
+app = flask.Flask(__name__)
+model = None
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+UPLOAD_FOLDER = 'images'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 def load_model():
     global model
@@ -23,11 +31,11 @@ def prepare_image(image, img_size):
 
     return image
 
-# initialize our Flask application and the Keras model
-app = flask.Flask(__name__)
-model = None
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=['GET', 'POST'])
 def predict():
     # initialize the data dictionary that will be returned from the
     # view
@@ -60,15 +68,29 @@ def predict():
                 r = {"label": label, "probability": float(prob)}
                 data["predictions"].append(r)
             '''
-            
+
             # indicate that the request was a success
             data["success"] = True
 
-    # return the data dictionary as a JSON response
-    return flask.jsonify(data)
+            # return the data dictionary as a JSON response
+            return flask.jsonify(data)
+        else:
+            pass
+    else:
+        return '''
+        <!doctype html>
+        <title>Upload new File</title>
+        <h1>Upload new File</h1>
+        <form action="" method=post enctype=multipart/form-data>
+          <p><input type=file capture=camera accept=image/* name=image>
+             <input type=submit value=Upload>
+        </form>
+        <p>%s</p>
+        ''' % "<br>".join(os.listdir(app.config['UPLOAD_FOLDER'],))
+
 
 if __name__ == "__main__":
     print(("* Loading Keras model and Flask starting server..."
-        "please wait until server has fully started"))
+           "please wait until server has fully started"))
     load_model()
     app.run()
