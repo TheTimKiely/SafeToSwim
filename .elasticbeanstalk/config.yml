@@ -1,10 +1,10 @@
 branch-defaults:
   master:
-    environment: null
+    environment: SafeToSwim-dev
 global:
   application_name: SafeToSwim
   branch: null
-  default_ec2_keyname: null
+  default_ec2_keyname: AwsEc2KeyPair
   default_platform: Python 3.6
   default_region: us-east-1
   include_git_submodules: true

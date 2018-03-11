@@ -1,0 +1,20 @@
+branch-defaults:
+  default:
+    environment: SafeToSwim-dev
+environment-defaults:
+  SafeToSwim-dev:
+    branch: null
+    repository: null
+global:
+  application_name: SafeToSwim
+  default_ec2_keyname: AwsEc2KeyPair
+  default_platform: arn:aws:elasticbeanstalk:us-east-1::platform/Python 3.6 running
+    on 64bit Amazon Linux/2.6.5
+  default_region: us-east-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  sc: null
+  workspace_type: Application
