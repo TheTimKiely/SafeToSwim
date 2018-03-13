@@ -5,20 +5,25 @@ from keras import models
 from PIL import Image
 import numpy as np
 import flask
-import os, io
+import os
+import io
 
 # initialize our Flask application and the Keras model
-app = flask.Flask(__name__)
+application = flask.Flask(__name__)
 model = None
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 UPLOAD_FOLDER = 'images'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def load_model():
     global model
     #model = ResNet50(weights="imagenet")
-    model = models.load_model('D:\code\ML\SafeToSwim\models\hab_MathBinaryClassifier.h5')
+    model_path = os.path.join('models', 'hab_MathBinaryClassifier.h5')
+    print(f'Loading model from: {model_path}')
+    model = models.load_model(model_path)
+    if model is None:
+        raise TypeError(f'Failed to load model from file {model_path}')
 
 def prepare_image(image, img_size):
     if image.mode != 'RGB':
@@ -35,7 +40,13 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route("/predict", methods=['GET', 'POST'])
+@application.route("/", methods=['GET'])
+def index():
+    return '''<!doctype html>
+        <title>Safe To Swim</title>
+        <h1>Welcome to SafeToSwim!</h1>'''
+
+@application.route("/predict", methods=['GET', 'POST'])
 def predict():
     # initialize the data dictionary that will be returned from the
     # view
@@ -86,11 +97,11 @@ def predict():
              <input type=submit value=Upload>
         </form>
         <p>%s</p>
-        ''' % "<br>".join(os.listdir(app.config['UPLOAD_FOLDER'],))
+        ''' % "<br>".join(os.listdir(application.config['UPLOAD_FOLDER'], ))
 
 
 if __name__ == "__main__":
     print(("* Loading Keras model and Flask starting server..."
            "please wait until server has fully started"))
     load_model()
-    app.run()
+    application.run()
