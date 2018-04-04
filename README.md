@@ -12,8 +12,12 @@ A service that tracks harmful algal blooms (HAB).
 1. Install Expo on your phone from Google Play or the iOS App Store.
 2. Install the Expo NPM module globally.  https://expo.io/learn
 3. cd into app/safe-to-swim.
-4. Execute `exp start`
-5. Scan the resulting QR code with the Expo app on your phone.
+4. On iOS : 
+      1. Execute `exp start --send-to <your phone number or email>`
+      2. Open the  link you receive via text message or email.
+5. On Android : 
+      1. Execute `exp start`
+      2. Scan the resulting QR code with the Expo app on your phone.
 
 ## Roadmap
 1) Identify algae blooms
