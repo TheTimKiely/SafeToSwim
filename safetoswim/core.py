@@ -3,10 +3,16 @@ from keras.preprocessing.image import img_to_array
 from keras.applications import imagenet_utils
 from keras import models
 from PIL import Image
+import PIL.ExifTags
 
 class PhotoProcessor(object):
     def __init__(self, image):
         self._image = image
+        self.exif = {
+            PIL.ExifTags.TAGS[k]: v
+            for k, v in self._image._getexif().items()
+            if k in PIL.ExifTags.TAGS
+            }
 
     def prepare_rgb_datas(self, img_size):
         rgb_data = None
