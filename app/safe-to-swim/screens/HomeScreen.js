@@ -24,18 +24,15 @@ export default class HomeScreen extends React.Component {
           <View style={styles.welcomeContainer}>
             <Image
               source={safeToSwim}
-              style={styles.fullSize}
+              style={styles.backgroundImage}
             />
           </View>
-
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
- 
+          </View>
         </ScrollView>
-
         <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
+          <Text style={styles.tabBarInfoText}>Safe to Swim:</Text>
           <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
             <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
           </View>
@@ -79,6 +76,10 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover'
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
