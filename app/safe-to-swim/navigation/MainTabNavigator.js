@@ -6,15 +6,15 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 import Colors from '../constants/Colors';
 
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import CameraScreen from '../screens/CameraScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 export default TabNavigator({
     Home: {
         screen: HomeScreen,
     },
-    Links: {
-        screen: LinksScreen,
+    Camera: {
+        screen: CameraScreen,
     },
     Settings: {
         screen: SettingsScreen,
@@ -31,7 +31,7 @@ export default TabNavigator({
                         `ios-information-circle${focused ? '' : '-outline'}` :
                         'md-information-circle';
                     break;
-                case 'Links':
+                case 'Camera':
                     iconName = Platform.OS === 'ios' ? `ios-camera${focused ? '' : '-outline'}` : 'md-camera';
                     break;
                 case 'Settings':
