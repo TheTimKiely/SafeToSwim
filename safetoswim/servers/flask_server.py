@@ -1,14 +1,10 @@
-from keras.applications import ResNet50
-from keras.preprocessing.image import img_to_array
-from keras.applications import imagenet_utils
-from keras import models
-from PIL import Image
-import numpy as np
 import flask
 import os
 import io
 
 # initialize our Flask application and the Keras model
+from safetoswim.core import PhotoProcessor
+
 application = flask.Flask(__name__)
 model = None
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -36,16 +32,6 @@ def get_model():
 
     return model
 
-def prepare_image(image, img_size):
-    if image.mode != 'RGB':
-        image = image.convert('RGB ')
-
-    image = image.resize(img_size)
-    image = img_to_array(image)
-    image = np.expand_dims(image, axis=0)
-    image = imagenet_utils.preprocess_input(image)
-
-    return image
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -68,10 +54,11 @@ def predict():
         if flask.request.files.get("image"):
             # read the image in PIL format
             image = flask.request.files["image"].read()
+            photo_processor = PhotoProcessor(image)
             image = Image.open(io.BytesIO(image))
 
             # preprocess the image and prepare it for classification
-            image = prepare_image(image, img_size=(128, 128))
+            image = photo_processor.prepare_rgb_data(image, img_size=(128, 128))
 
             # classify the input image and then initialize the list
             # of predictions to return to the client
