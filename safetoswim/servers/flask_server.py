@@ -1,6 +1,8 @@
 import flask
 import os
-import io
+
+from flask import json
+from keras import models
 
 # initialize our Flask application and the Keras model
 from safetoswim.core import PhotoProcessor
@@ -55,20 +57,21 @@ def predict():
             # read the image in PIL format
             image = flask.request.files["image"].read()
             photo_processor = PhotoProcessor(image)
-            image = Image.open(io.BytesIO(image))
 
             # preprocess the image and prepare it for classification
-            image = photo_processor.prepare_rgb_data(image, img_size=(128, 128))
+            rgb_data = photo_processor.prepare_rgb_data(img_size=(128, 128))
 
             # classify the input image and then initialize the list
             # of predictions to return to the client
-            preds = model.predict(image)
+            preds = model.predict(rgb_data)
             #pred_class = model.p
             #results = imagenet_utils.decode_predictions(preds)
             if preds[0][0] >= 0.5:
                 data["prediction"] = 'bloom'
             else:
                 data["prediction"] = 'not-bloom'
+
+            data['exif'] = photo_processor.exif
 
             # loop over the results and add them to the list of
             # returned predictions
@@ -82,7 +85,8 @@ def predict():
             data["success"] = True
 
             # return the data dictionary as a JSON response
-            return flask.jsonify(data)
+            response = flask.jsonify(str(data))
+            return response
         else:
             pass
     else:
