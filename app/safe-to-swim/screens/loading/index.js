@@ -4,7 +4,7 @@ import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
 
-export default class LoadingScreen extends React.Component {
+class LoadingScreen extends React.Component {
   state = {
     isLoadingComplete: false,
   };
@@ -32,9 +32,9 @@ export default class LoadingScreen extends React.Component {
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
-        require('./assets/images/robot-dev.png'),
-        require('./assets/images/robot-prod.png'),
-        require('./assets/images/safe-to-swim.jpg'),
+        require('../../assets/images/robot-dev.png'),
+        require('../../assets/images/robot-prod.png'),
+        require('../../assets/images/safe-to-swim.jpg'),
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
@@ -53,7 +53,7 @@ export default class LoadingScreen extends React.Component {
   };
 
   _handleFinishLoading = () => {
-    this.props.actions.loadingCompleted();
+      this.props.actions.loadingCompleted();
   };
 }
 
@@ -67,3 +67,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.2)',
   },
 });
+
+
+function mapStateToProps(state) {
+  return {
+      isLoadingComplete: state.loading.isLoadingComplete
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+      actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoadingScreen);

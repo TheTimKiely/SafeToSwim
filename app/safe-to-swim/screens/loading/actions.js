@@ -1,4 +1,4 @@
- import * as types from '../../constants/actionTypes';
+ import * as types from '../../constants/action-types';
 
  export function loadingFailed(error) {
      return { type: types.LOADING_FAILED, isLoadingComplete: true, error: error };
