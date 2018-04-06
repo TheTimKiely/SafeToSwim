@@ -17,9 +17,11 @@
         "name": "John Need",
         "email": "john.need@gmail.com"
     },
-    "contributors": [{
-        "name": "Tim Kiely"
-    }],
+    "contributors": [
+        {
+            "name": "Tim Kiely"
+        }
+    ],
     "scripts": {
         "test": "node ./node_modules/jest/bin/jest.js --watchAll"
     },

@@ -8,9 +8,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import safeToSwim from "../assets/images/safe-to-swim.jpg"
+import safeToSwim from "../../assets/images/safe-to-swim.jpg"
 import { WebBrowser } from 'expo';
-import { MonoText } from '../components/StyledText';
+import { MonoText } from '../../components/StyledText';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
