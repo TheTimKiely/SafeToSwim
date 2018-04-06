@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Image,
+  ImageBackground,
   Platform,
   ScrollView,
   StyleSheet,
@@ -8,9 +9,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import safeToSwim from "../assets/images/safe-to-swim.jpg"
+import safeToSwim from "../../assets/images/safe-to-swim.jpg"
 import { WebBrowser } from 'expo';
-import { MonoText } from '../components/StyledText';
+import { MonoText } from '../../components/StyledText';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -20,24 +21,21 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={safeToSwim}
-              style={styles.backgroundImage}
-            />
-          </View>
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-          </View>
-        </ScrollView>
+      <ImageBackground style={{ flex: 1 }}
+      source={safeToSwim}
+    >
+     <View  style={{position: 'absolute', top: 100, left: 0, height: 70, width: '100%', backgroundColor: 'rgba(255,255,255,0.5)', padding: 10}}>
+            <Text style={{ textAlign:'center', fontSize: 24, padding: 10}}>Safe to Swim</Text>
+      </View>
         <View style={styles.tabBarInfoContainer}>
           <Text style={styles.tabBarInfoText}>Safe to Swim:</Text>
           <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
             <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
           </View>
         </View>
+        </ImageBackground>
       </View>
+
     );
   }
 

@@ -1,6 +1,27 @@
 {
     "main": "node_modules/expo/AppEntry.js",
     "private": true,
+    "version": "0.0.2",
+    "keywords": [
+        "safe to swim",
+        "vermont",
+        "code for america",
+        "code for btv",
+        "react native",
+        "redux",
+        "expo",
+        "javascript"
+    ],
+    "license": "SEE LICENSE IN LICENSE.md",
+    "author": {
+        "name": "John Need",
+        "email": "john.need@gmail.com"
+    },
+    "contributors": [
+        {
+            "name": "Tim Kiely"
+        }
+    ],
     "scripts": {
         "test": "node ./node_modules/jest/bin/jest.js --watchAll"
     },
@@ -9,15 +30,25 @@
     },
     "dependencies": {
         "@expo/samples": "2.1.1",
+        "@expo/vector-icons": "^6.3.1",
         "expo": "^26.0.0",
+        "prop-types": "^15.6.1",
         "react": "16.3.0-alpha.1",
         "react-native": "https://github.com/expo/react-native/archive/sdk-26.0.0.tar.gz",
         "react-native-is-iphonex": "^1.0.1",
-        "react-navigation": "^1.5.8",
         "react-native-sentry": "^0.35.3",
+        "react-navigation": "^1.5.8",
+        "react-navigation-redux-helpers": "^1.0.3",
+        "react-redux": "^5.0.7",
+        "redux": "^3.7.2",
+        "redux-thunk": "^2.2.0",
         "sentry-expo": "~1.7.0"
     },
     "devDependencies": {
+        "babel-eslint": "^8.2.2",
+        "eslint": "^4.19.1",
+        "eslint-plugin-babel": "^5.0.0",
+        "eslint-plugin-react": "^7.7.0",
         "jest-expo": "^26.0.0"
     }
 }

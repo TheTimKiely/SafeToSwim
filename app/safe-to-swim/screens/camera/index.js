@@ -1,7 +1,7 @@
 import { Constants, Camera, FileSystem, Permissions } from 'expo';
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Slider, Vibration } from 'react-native';
-import GalleryScreen from './GalleryScreen';
+import GalleryScreen from './gallery';
 import isIPhoneX from 'react-native-is-iphonex';
 
 const landmarkSize = 2;
