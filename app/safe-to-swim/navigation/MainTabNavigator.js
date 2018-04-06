@@ -5,9 +5,9 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from '../constants/Colors';
 
-import HomeScreen from '../screens/HomeScreen';
-import CameraScreen from '../screens/CameraScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import HomeScreen from '../screens/home/';
+import CameraScreen from '../screens/camera/';
+import SettingsScreen from '../screens/settings/';
 
 export default TabNavigator({
     Home: {
@@ -42,7 +42,8 @@ export default TabNavigator({
                 Ionicons name = { iconName }
                 size = { 28 }
                 style = {
-                    { marginBottom: -3 } }
+                    { marginBottom: -3 }
+                }
                 color = { focused ? Colors.tabIconSelected : Colors.tabIconDefault }
                 />
             );
