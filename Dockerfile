@@ -1,7 +1,7 @@
 FROM python:3.6.2
 MAINTAINER John Need "john.need@gmail.com"
-COPY safetoswim /app
+ADD . /app
 WORKDIR /app
-RUN pip install --upgrade pip; pip install -r requirements.txt;
+RUN pip install --upgrade pip; pip install -r requirements.txt; python safetoswim/setup.py install
 ENTRYPOINT ["python"]
-CMD ["servers/flask_server.py"]
+CMD ["safetoswim/servers/flask_server.py"]
