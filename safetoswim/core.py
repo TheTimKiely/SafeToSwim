@@ -1,5 +1,5 @@
 import numpy as np
-
+import PIL
 from keras.applications import ResNet50
 import io
 from keras.preprocessing.image import img_to_array

@@ -17,7 +17,7 @@ application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def load_model():
     global model
     #model = ResNet50(weights="imagenet")
-    model_path = os.path.join('models', 'hab_MathBinaryClassifier.h5')
+    model_path = os.path.join('safetoswim/servers/models', 'hab_MathBinaryClassifier.h5')
     print(f'Loading model from: {model_path}')
     model = models.load_model(model_path)
     if model is None:
@@ -106,4 +106,5 @@ if __name__ == "__main__":
     print(("* Loading Keras model and Flask starting server..."
            "please wait until server has fully started"))
     load_model()
-    application.run()
+    application.run(debug=True,host='127.0.0.1')
+
