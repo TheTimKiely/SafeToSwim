@@ -1,6 +1,6 @@
 // @flow
 
-import {dataLayer} from '../../data-sources/data-layer';
+import * as dataLayer from '../../data-sources/data-layer';
 
 export function uploadPhoto(photo) {
     // this is not used anywhere

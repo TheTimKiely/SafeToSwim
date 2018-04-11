@@ -1,7 +1,7 @@
-import * as types from '../../constants/actionTypes';
-import initialState from '../../reducers/initialState';
+import * as types from '../../constants/action-types';
+import initialState from '../../reducers/initial-state';
 
-export function reducers(state = initialState.trashBagFinder, action) {
+export default function reducer(state = initialState.camera, action) {
     switch (action.type) {
 
         case types.FETCH_PHOTOS_SUCCESS :

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, View, TouchableOpacity, Text, ScrollView} from 'react-native';
+import {Alert, Image, TouchableHighlight, StyleSheet, View, TouchableOpacity, Text, ScrollView} from 'react-native';
 import {FileSystem} from 'expo';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
 class GalleryScreen extends React.Component {
 
     static propTypes = {
-        actions: PropTypes.object
+        actions: PropTypes.object,
+        onPress: PropTypes.func
     };
 
     constructor(props) {
@@ -139,46 +140,46 @@ class GalleryScreen extends React.Component {
   //     });
   // }
 
- //  handleFaceDetectionError = error => console.warn(error);
+    //  handleFaceDetectionError = error => console.warn(error);
 
-  renderFaces = photoUri =>
-      this.state.images[photoUri] &&
-    this.state.faces[photoUri] &&
-    this.state.faces[photoUri].map(this.renderFace(this.state.images[photoUri]));
+  // renderFaces = photoUri =>
+  //     this.state.images[photoUri] &&
+  //   this.state.faces[photoUri] &&
+  //   this.state.faces[photoUri].map(this.renderFace(this.state.images[photoUri]));
+  //
+  // renderFace = image => (face, index) => {
+  //     const {scaleX, scaleY, offsetX, offsetY} = this.getImageDimensions(image);
+  //     const layout = {
+  //         top: offsetY + face.bounds.origin.y * scaleY,
+  //         left: offsetX + face.bounds.origin.x * scaleX,
+  //         width: face.bounds.size.width * scaleX,
+  //         height: face.bounds.size.height * scaleY
+  //     };
 
-  renderFace = image => (face, index) => {
-      const {scaleX, scaleY, offsetX, offsetY} = this.getImageDimensions(image);
-      const layout = {
-          top: offsetY + face.bounds.origin.y * scaleY,
-          left: offsetX + face.bounds.origin.x * scaleX,
-          width: face.bounds.size.width * scaleX,
-          height: face.bounds.size.height * scaleY
-      };
-
-      return (
-          <View
-              key={index}
-              style={[styles.face, layout]}
-              transform={[
-                  {perspective: 600},
-                  {rotateZ: `${(face.rollAngle || 0).toFixed(0)}deg`},
-                  {rotateY: `${(face.yawAngle || 0).toFixed(0)}deg`}
-              ]}>
-              <Text style={styles.faceText}>😁 {(face.smilingProbability * 100).toFixed(0)}%</Text>
-          </View>
-      );
-  };
+  //     return (
+  //         <View
+  //             key={index}
+  //             style={[styles.face, layout]}
+  //             transform={[
+  //                 {perspective: 600},
+  //                 {rotateZ: `${(face.rollAngle || 0).toFixed(0)}deg`},
+  //                 {rotateY: `${(face.yawAngle || 0).toFixed(0)}deg`}
+  //             ]}>
+  //             <Text style={styles.faceText}>😁 {(face.smilingProbability * 100).toFixed(0)}%</Text>
+  //         </View>
+  //     );
+  // };
 
   render() {
       return (
           <View style={styles.container}>
-              <TouchableOpacity style={styles.backButton} onPress={this.actions.onPress}>
+              <TouchableOpacity style={styles.backButton} onPress={this.props.onPress}>
                   <Text>Back</Text>
               </TouchableOpacity>
               <ScrollView contentComponentStyle={{flex: 1}}>
                   <View style={styles.pictures}>
                       {this.state.photos.map(photoUri => (
-                          <View style={styles.pictureWrapper} key={photoUri}>
+                          <TouchableHighlight onPress={() => { Alert.alert('Pic Selected'); }} style={styles.pictureWrapper} key={photoUri}>
                               <Image
                                   key={photoUri}
                                   style={styles.picture}
@@ -186,10 +187,10 @@ class GalleryScreen extends React.Component {
                                       uri: `${FileSystem.documentDirectory}photos/${photoUri}`
                                   }}
                               />
-                              <View style={styles.facesContainer}>
-                                  {this.renderFaces(`${FileSystem.documentDirectory}photos/${photoUri}`)}
-                              </View>
-                          </View>
+                              {/* <View style={styles.facesContainer}>*/}
+                              {/* {this.renderFaces(`${FileSystem.documentDirectory}photos/${photoUri}`)}*/}
+                              {/* </View>*/}
+                          </TouchableHighlight>
                       ))}
                   </View>
               </ScrollView>
