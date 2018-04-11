@@ -21,8 +21,11 @@ A service that tracks harmful algal blooms (HAB).
       
 ### To view the latest build of the mobile client
  1. Load the Expo app on your phone:
+
     iOS : https://itunes.apple.com/app/apple-store/id982107779
+
     Android : https://play.google.com/store/apps/details?id=host.exp.exponent
+
  2. Send yourself a link (iOS) or scan the barcode (Android) from this webpage : https://expo.io/@johnneed/safe-to-swim
  
 
