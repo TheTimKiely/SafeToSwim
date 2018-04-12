@@ -1,5 +1,6 @@
 import flask
 import os
+import sys
 
 from flask import json
 from keras import models
@@ -16,8 +17,9 @@ application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def load_model():
     global model
+    file_dir = os.path.abspath(os.path.dirname(__file__))
     #model = ResNet50(weights="imagenet")
-    model_path = os.path.join('safetoswim/servers/models', 'hab_MathBinaryClassifier.h5')
+    model_path = os.path.join(file_dir, 'models', 'hab_MathBinaryClassifier.h5')
     print(f'Loading model from: {model_path}')
     model = models.load_model(model_path)
     if model is None:
