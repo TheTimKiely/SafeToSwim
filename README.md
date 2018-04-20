@@ -2,6 +2,16 @@
 A service that tracks harmful algal blooms (HAB).
 
 ## Getting started
+
+### Run the service using Docker
+1. You'll need a Docker Account (free) : https://docs.docker.com/
+2. Install Docker & Docker Compose following the official instructions for your platform: https://docs.docker.com/compose/install/
+3. Clone the repo.
+4. `cd safetoswim`
+5. `docker-compose up`
+6. After setup, point your browser to http://localhost:5000/predict
+
+
 ### To run the service...
 1. Start the server: Run flask_server.py from the 'servers' directory
 2. Call the service: 
