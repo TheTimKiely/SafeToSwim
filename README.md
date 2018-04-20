@@ -8,7 +8,7 @@ A service that tracks harmful algal blooms (HAB).
 2. Install Docker & Docker Compose following the official instructions for your platform: https://docs.docker.com/compose/install/
 3. Clone the repo.
 4. `cd safetoswim`
-5. `docker-compose up`
+5. `docker-compose up` (You may need to login on the CLI first)
 6. After setup, point your browser to http://localhost:5000/predict
 
 
