@@ -1,0 +1,7 @@
+[include]
+./app/safe-to-swim
+
+[ignore]
+./app/safe-to-swim/node_modules/*
+
+[libs]
