@@ -15,19 +15,20 @@ class PhotoProcessor(object):
     def get_exif_data(self, image):
         """Returns a dictionary from the exif data of an PIL Image item. Also converts the GPS Tags"""
         exif_data = {}
-        info = image._getexif()
-        if info:
-            for tag, value in info.items():
-                decoded = TAGS.get(tag, tag)
-                if decoded == "GPSInfo":
-                    gps_data = {}
-                    for t in value:
-                        sub_decoded = GPSTAGS.get(t, t)
-                        gps_data[sub_decoded] = value[t]
+        if image.__getattribute__('_getexif'):
+            info = image._getexif()
+            if info:
+                for tag, value in info.items():
+                    decoded = TAGS.get(tag, tag)
+                    if decoded == "GPSInfo":
+                        gps_data = {}
+                        for t in value:
+                            sub_decoded = GPSTAGS.get(t, t)
+                            gps_data[sub_decoded] = value[t]
 
-                    exif_data[decoded] = gps_data
-                else:
-                    exif_data[decoded] = value
+                        exif_data[decoded] = gps_data
+                    else:
+                        exif_data[decoded] = value
         return exif_data
 
     def prepare_rgb_data(self, img_size):

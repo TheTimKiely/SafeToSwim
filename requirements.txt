@@ -3,6 +3,6 @@ keras
 tensorflow
 numpy
 Pillow
-rembrandtml
+theano
 sklearn
 h5py
