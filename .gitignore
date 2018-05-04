@@ -1,5 +1,6 @@
 # PyCham file
 .idea/
+.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -102,8 +103,13 @@ ENV/
 
 # mypy
 .mypy_cache/
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+
+
+# Elastic Beanstalk Files
+
+.elasticbeanstalk/*
+
+!.elasticbeanstalk/*.cfg.yml
+
+!.elasticbeanstalk/*.global.yml
+
