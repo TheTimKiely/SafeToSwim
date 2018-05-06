@@ -1,7 +1,7 @@
 version: '3'
 services:
-  worker:
+  web:
     env_file: .env
     build: .
     ports:
-     - "80:80"
+     - "5000:5000"

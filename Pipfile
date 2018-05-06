@@ -1,19 +1,19 @@
 [[source]]
-
-url = "https://pypi.python.org/simple"
+url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
-rembrandtml = "*"
-
+tensorflow = "*"
+numpy = "*"
+sklearn = "*"
+"h5py" = "*"
+Flask = "*"
+Keras = "*"
+Pillow = "*"
+Theano = "*"
 
 [dev-packages]
 
-
-
 [requires]
-
 python_version = "3.6"

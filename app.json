@@ -1,0 +1,22 @@
+{
+  "name": "Safe To Swim",
+  "description": "A service that tracks harmful algal blooms",
+  "image": "heroku/python",
+  "repository": "https://github.com/heroku/python-getting-started",
+  "keywords": ["python", "flask" ],
+  "addons": [],
+  "env": {
+    "SECRET_KEY": {
+      "description": "The secret key, if we ever need one",
+      "generator": "secret"
+    }
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "test-setup": "python manage.py collectstatic --noinput",
+        "test": "python manage.py test"
+      }
+    }
+  }
+}
