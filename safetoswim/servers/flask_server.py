@@ -92,7 +92,7 @@ def predict():
                 response = flask.jsonify('SafeToSwim encountered an unexpected error: {}'.format(ex))
             return response
         else:
-            pass
+            response = flask.jsonify('Select a jpg to upload')
     else:
         return '''
         <!doctype html>
@@ -105,10 +105,10 @@ def predict():
         <p>%s</p>
         ''' % "<br>".join(os.listdir(application.config['UPLOAD_FOLDER'], ))
 
-
 if __name__ == "__main__":
     print(("* Loading Keras model and Flask starting server..."
            "please wait until server has fully started"))
     load_model()
-    application.run()#`host="0.0.0.0", debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    application.run(host='0.0.0.0', port=port, debug=True)
 

@@ -1,0 +1,8 @@
+build:
+  languages:
+    - python
+release:
+  command:
+    - pip install -r requirements.txt; python safetoswim/setup.py install
+run:
+  web: python safetoswim/servers/flask_server.py

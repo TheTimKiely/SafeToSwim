@@ -6,3 +6,4 @@ Pillow
 theano
 sklearn
 h5py
+pipenv
