@@ -1,9 +1,11 @@
 // @flow
 
-function postData(url, data) {
+function postData(url, photo) {
     // Default options are marked with *
+    const data = new FormData();
+    data.append('photo', { uri: photo.uri, type: "image/jpeg", name: 'photo' });
     return fetch(url, {
-            body: JSON.stringify(data), // must match 'Content-Type' header
+            body: data, // must match 'Content-Type' header
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, same-origin, *omit
             headers: {
@@ -19,7 +21,7 @@ function postData(url, data) {
 }
 
 export function uploadPhoto(photo: any) {
-    postData('https://safe-to-swim.herokuapp.com/predict', { files: [photo] })
+    postData('https://safe-to-swim.herokuapp.com/predict', photo)
         .then(data => console.log(data)) // JSON from `response.json()` call
         .catch(error => console.error(error));
 }
