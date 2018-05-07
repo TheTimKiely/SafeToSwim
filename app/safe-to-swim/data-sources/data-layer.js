@@ -19,7 +19,7 @@ function postData(url, data) {
 }
 
 export function uploadPhoto(photo: any) {
-    postData('http://localhost:5000/api', { photo })
+    postData('https://safe-to-swim.herokuapp.com/predict', { files: [photo] })
         .then(data => console.log(data)) // JSON from `response.json()` call
         .catch(error => console.error(error));
 }
