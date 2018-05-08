@@ -1,10 +1,10 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font } from 'expo';
-import { Ionicons } from '@expo/vector-icons';
+import {Platform, StatusBar, StyleSheet, View} from 'react-native';
+import {AppLoading, Asset, Font} from 'expo';
+import {Ionicons} from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
-import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
+import {Provider} from 'react-redux';
 import reducer from './reducers/';
 import thunk from 'redux-thunk';
 import PropTypes from 'prop-types';
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 class LoadingScreen extends React.Component {
 
 
-    static propTypes = { skipLoadingScreen: PropTypes.bool };
+    static propTypes = {skipLoadingScreen: PropTypes.bool};
 
 
     constructor(props) {
@@ -36,7 +36,8 @@ class LoadingScreen extends React.Component {
 
     _loadResourcesAsync = async () => Promise.all([
         Asset.loadAsync([
-            require('./assets/images/safe-to-swim'),
+            require('./assets/images/robot-dev.png'),
+            require('./assets/images/robot-prod.png')
         ]),
         Font.loadAsync({
             // This is the font that we are using for our tab bar
@@ -54,24 +55,25 @@ class LoadingScreen extends React.Component {
     };
 
     _handleFinishLoading = () => {
-        this.setState({ isLoadingComplete: true });
+        this.setState({isLoadingComplete: true});
     };
 
     render() {
         if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
-            return (<
-                AppLoading startAsync={this._loadResourcesAsync}
-                onError={this._handleLoadingError}
-                onFinish={this._handleFinishLoading}
-            />
+            return (
+                <AppLoading
+                    startAsync={this._loadResourcesAsync}
+                    onError={this._handleLoadingError}
+                    onFinish={this._handleFinishLoading}
+                />
             );
         }
-        return (<
-            View style={styles.container} > {Platform.OS === 'ios' && <StatusBar barStyle='default' />} {
-                Platform.OS === 'android' && < View style={styles.statusBarUnderlay}
-                />}
-            <RootNavigation />
-        </View>
+        return (
+            <View style={styles.container}>
+                {Platform.OS === 'ios' && <StatusBar barStyle='default'/>}
+                {Platform.OS === 'android' && <View style={styles.statusBarUnderlay}/>}
+                <RootNavigation/>
+            </View>
         );
 
     }
@@ -84,9 +86,10 @@ export default class App extends React.Component {
 
     render() {
         return (
-            <Provider store={store} >
-                <LoadingScreen />
+            <Provider store={store}>
+                <LoadingScreen/>
             </Provider>
         );
     }
 }
+

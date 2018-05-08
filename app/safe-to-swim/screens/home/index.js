@@ -9,12 +9,11 @@ import {
     Image,
     Share,
     StatusBar,
-    StyleSheet,
     Text,
     TouchableOpacity,
     View,
 } from 'react-native';
-import { Constants, ImagePicker } from 'expo';
+import {Constants, Camera, FileSystem, Permissions, ImagePicker} from 'expo';
 import safeToSwim from '../../assets/images/safe-to-swim.jpg';
 import { MonoText } from '../../components/StyledText';
 const styles = StyleSheet.create({
@@ -111,7 +110,74 @@ const styles = StyleSheet.create({
 });
 console.disableYellowBox = true;
 const url = ''
-_maybeRenderUploadingOverlay = () => {
+async function uploadImageAsync(uri) {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const ref = firebase
+      .storage()
+      .ref()
+      .child(uuid.v4());
+  
+    const snapshot = await ref.put(blob);
+    return snapshot.downloadURL;
+  }
+export default class HomeScreen extends React.Component {
+
+
+
+    static navigationOptions = {
+        header: null
+    };
+
+    constructor(props: Object) {
+        super(props);
+ 
+        this.state = {
+            image: null,
+            uploading: false
+        };
+    }
+    async componentWillMount() {
+        const {status} = await Permissions.askAsync(Permissions.CAMERA);
+        this.setState({permissionsGranted: status === 'granted'});
+    }
+    render() {
+        let { image } = this.state;
+        return (
+            <View style={styles.container}>
+                {image
+                    ? null
+                    : (
+                        <Text
+                            style={{
+                                fontSize: 20,
+                                marginBottom: 20,
+                                textAlign: 'center',
+                                marginHorizontal: 15,
+                            }}>
+                            Example: Upload ImagePicker result
+                        </Text>
+                    )
+                }
+
+                <Button
+                    onPress={this._pickImage}
+                    title="Pick an image from camera roll"
+                />
+
+                <Button onPress={this._takePhoto} title="Take a photo" />
+
+                {this._maybeRenderImage()}
+                {this._maybeRenderUploadingOverlay()}
+
+                <StatusBar barStyle="default" />
+            </View>
+
+        );
+    }
+
+    
+  _maybeRenderUploadingOverlay = () => {
     if (this.state.uploading) {
       return (
         <View
@@ -212,68 +278,6 @@ _maybeRenderUploadingOverlay = () => {
       this.setState({ uploading: false });
     }
   };
-}
-
-async function uploadImageAsync(uri) {
-  const response = await fetch(uri);
-  const blob = await response.blob();
-  const ref = firebase
-    .storage()
-    .ref()
-    .child(uuid.v4());
-
-  const snapshot = await ref.put(blob);
-  return snapshot.downloadURL;
-}
-export default class HomeScreen extends React.Component {
-
-
-
-    static navigationOptions = {
-        header: null
-    };
-
-    constructor(props) {
-        this.state = {
-            image: null,
-            uploading: false,
-        };
-    }
-
-    render() {
-        let { image } = this.state;
-        return (
-            <View style={styles.container}>
-                {image
-                    ? null
-                    : (
-                        <Text
-                            style={{
-                                fontSize: 20,
-                                marginBottom: 20,
-                                textAlign: 'center',
-                                marginHorizontal: 15,
-                            }}>
-                            Example: Upload ImagePicker result
-                        </Text>
-                    )
-                }
-
-                <Button
-                    onPress={this._pickImage}
-                    title="Pick an image from camera roll"
-                />
-
-                <Button onPress={this._takePhoto} title="Take a photo" />
-
-                {this._maybeRenderImage()}
-                {this._maybeRenderUploadingOverlay()}
-
-                <StatusBar barStyle="default" />
-            </View>
-
-        );
-    }
 }
 
 
