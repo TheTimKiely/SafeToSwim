@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     }
 });
 
+
 class GalleryScreen extends React.Component {
 
     static propTypes = {
