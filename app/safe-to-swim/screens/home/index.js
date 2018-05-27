@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         color: '#2e78b7'
     }
 });
- 
+
 export default class HomeScreen extends React.Component {
 
     static navigationOptions = {
@@ -154,8 +154,8 @@ export default class HomeScreen extends React.Component {
 
                 <Button onPress={this._takePhoto} title="Take a photo" />
 
-                {this._maybeRenderImage()}
-                {this._maybeRenderUploadingOverlay()}
+                {/*{this._maybeRenderImage()}*/}
+                {/*{this._maybeRenderUploadingOverlay()}*/}
 
                 <StatusBar barStyle="default" />
             </View>
@@ -163,4 +163,3 @@ export default class HomeScreen extends React.Component {
         );
     }
 }
-    
