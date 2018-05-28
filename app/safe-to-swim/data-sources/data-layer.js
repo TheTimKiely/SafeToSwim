@@ -2,7 +2,8 @@
 
 import * as types from '../constants/action-types';
 
-const url = 'https://safe-to-swim.herokuapp.com/predict';
+// const url = 'https://safe-to-swim.herokuapp.com/predict';
+const url = 'http:/10.0.0.4:5000/predict';
 
 function postData(url, data) {
     // Default options are marked with *
@@ -12,7 +13,7 @@ function postData(url, data) {
         credentials: 'same-origin', // include, same-origin, *omit
         headers: {
             'user-agent': 'Mozilla/4.0 MDN Example',
-            'content-type': 'application/json'
+            'content-type': 'multipart/form-data'
         },
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         mode: 'cors', // no-cors, cors, *same-origin
@@ -32,29 +33,23 @@ export async function upload(dispatch, data) {
     };
 
     options.body = new FormData();
-    for (const key in data) {
-        options.body.append(key, data[key]);
-    }
+    options.body.append('image', data);
+    options.body.append('name', 'testfile');
 
-    return fetch(url, options)
-        .then(response => response
-            .json()
-            .then(responseJson => {
-                    console.log(responseJson);
-                }
-            ).catch(error => {
-                    console.log(error);
-                }
-            )
-        ).catch(err => {
-            console.log(err)
-        });
+    const response = await fetch(url, options);
+    response.json().then(responseJson => {
+            console.log(responseJson);
+        }
+    ).catch(error => {
+            console.log(error);
+        }
+    );
 }
 
 
 export function uploadPhoto(photo: any) {
-    // const url = 'https://safe-to-swim.herokuapp.com/predict';
-    // const data = new FormData();
+    const url = 'https://safe-to-swim.herokuapp.com/predict';
+    const data = new FormData();
     // data.append('photo', {
     //     uri: photo.uri,
     //     type: 'image/jpeg', // or photo.type
