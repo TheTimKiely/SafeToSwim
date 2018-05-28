@@ -37,13 +37,18 @@ export async function upload(dispatch, data) {
     }
 
     return fetch(url, options)
-        .then(response => response.json()
-            .then(responseJson =>
-            // You put some checks here
-                console.log(responseJson);
-            )).catch(
-            error => { console.log(error); }
-        );
+        .then(response => response
+            .json()
+            .then(responseJson => {
+                    console.log(responseJson);
+                }
+            ).catch(error => {
+                    console.log(error);
+                }
+            )
+        ).catch(err => {
+            console.log(err)
+        });
 }
 
 
