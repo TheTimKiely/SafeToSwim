@@ -1,1 +1,1 @@
-export default {camera:{}};
+export default {camera:{}, home: {uploads: 0, positives: 0, negatives: 0}};

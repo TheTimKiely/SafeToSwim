@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import camera from '../screens/camera/reducer';
-
-const rootReducer = combineReducers({camera});
+import home from '../screens/home/reducer';
+const rootReducer = combineReducers({camera, home});
 
 export default rootReducer;

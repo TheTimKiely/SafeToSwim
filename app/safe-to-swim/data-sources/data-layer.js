@@ -1,5 +1,9 @@
 // @flow
 
+import * as types from '../constants/action-types';
+
+const url = 'https://safe-to-swim.herokuapp.com/predict';
+
 function postData(url, data) {
     // Default options are marked with *
     return fetch(url, {
@@ -19,8 +23,8 @@ function postData(url, data) {
 }
 
 
-async function upload(url, data) {
-    let options = {
+export async function upload(dispatch, data) {
+    const options = {
         headers: {
             'Content-Type': 'multipart/form-data'
         },
@@ -28,24 +32,24 @@ async function upload(url, data) {
     };
 
     options.body = new FormData();
-    for (let key in data) {
+    for (const key in data) {
         options.body.append(key, data[key]);
     }
 
     return fetch(url, options)
-        .then(response => {
-            return response.json()
-                .then(responseJson => {
-                    //You put some checks here
-                    return responseJson;
-                });
-        });
+        .then(response => response.json()
+            .then(responseJson =>
+            // You put some checks here
+                console.log(responseJson);
+            )).catch(
+            error => { console.log(error); }
+        );
 }
 
 
 export function uploadPhoto(photo: any) {
-    const url = 'https://safe-to-swim.herokuapp.com/predict';
-    //const data = new FormData();
+    // const url = 'https://safe-to-swim.herokuapp.com/predict';
+    // const data = new FormData();
     // data.append('photo', {
     //     uri: photo.uri,
     //     type: 'image/jpeg', // or photo.type
@@ -55,12 +59,12 @@ export function uploadPhoto(photo: any) {
         file: {
             uri: photo.uri,
             type: 'image/jpeg',
-            name: 'testPhoto',
+            name: 'testPhoto'
         }
     })
         .then(res => console.log('photo uploaded!'))
         .catch(error => {
-            console.error(error)
+            console.error(error);
         });
     // fetch(url, {
     //     method: 'post',
@@ -68,4 +72,25 @@ export function uploadPhoto(photo: any) {
     // }).then(res => {
     //     console.log(res)
     // }).catch(error => console.error(error));
+}
+
+export async function getUserStats(dispatch: () => void): void {
+    try {
+        const value = await AsyncStorage.getItem('@SafeToSwim:key');
+        if (value !== null) {
+            dispatch({type: types.GET_USER_STATS_SUCCESS, data: value});
+        }
+    } catch (error) {
+        dispatch({type: types.GET_USER_STATS_FAIL});
+    }
+}
+
+
+export async function setUserStats(dispatch: () => void, userStats: Object): void {
+    try {
+        await AsyncStorage.setItem('@SafeToSwim:key', userStats);
+        dispatch({type: types.SET_USER_STATS_SUCCESS, data: userStats});
+    } catch (error) {
+        dispatch({type: types.SET_USER_STATS_FAIL});
+    }
 }
