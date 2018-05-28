@@ -1,21 +1,28 @@
 import React from 'react';
 import {
-    ImageBackground,
     Platform,
     StyleSheet,
+    ActivityIndicator,
+    Button,
+    Image,
+    StatusBar,
     Text,
+    TouchableOpacity,
     View
 } from 'react-native';
-import safeToSwim from '../../assets/images/safe-to-swim.jpg';
-import {MonoText} from '../../components/StyledText';
+import {Permissions, ImagePicker} from 'expo';
+import PropTypes from 'prop-types';
+import Dashboard from './dashboard';
+import {bindActionCreators} from 'redux';
+import * as actions from './actions';
+import {connect} from 'react-redux';
+
 const styles = StyleSheet.create({
-    backgroundImage: {
-        flex: 1,
-        resizeMode: 'cover'
-    },
+
     container: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        paddingTop: 30
     },
     developmentModeText: {
         marginBottom: 20,
@@ -92,41 +99,159 @@ const styles = StyleSheet.create({
         marginTop: 15,
         alignItems: 'center'
     },
+
     helpLink: {
         paddingVertical: 15
     },
     helpLinkText: {
         fontSize: 14,
         color: '#2e78b7'
+    },
+    toolbar: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        height: 50
     }
 });
 
-export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-      header: null
-  };
+class HomeScreen extends React.Component {
+
+    static propTypes = {actions: PropTypes.object};
+
+    static navigationOptions = {
+        header: null
+    };
+
+    constructor(props: Object) {
+        super(props);
+
+        this.state = {
+            image: null,
+            uploading: false
+        };
+    }
+
+    async componentWillMount() {
+        // await Permissions.askAsync(Permissions.CAMERA);
+        const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        this.setState({permissionsGranted: status === 'granted'});
+    }
 
 
-  render() {
-      return (
-          <View style={styles.container}>
-              <ImageBackground style={{flex: 1}}
-                  source={safeToSwim}
-              >
-                  <View style={{position: 'absolute', top: 100, left: 0, height: 70, width: '100%', backgroundColor: 'rgba(255,255,255,0.5)', padding: 10}}>
-                      <Text style={{textAlign:'center', fontSize: 24, padding: 10}}>Safe to Swim</Text>
-                  </View>
-                  <View style={styles.tabBarInfoContainer}>
-                      <Text style={styles.tabBarInfoText}>Safe to Swim:</Text>
-                      <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-                          <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-                      </View>
-                  </View>
-              </ImageBackground>
-          </View>
+    upload = (image: Object): () => Object => (
+        () => this.props.actions.upload(image)
+            .then(results => {
+                console.log(results);
+            })
+    );
+    // let uploadResponse, uploadResult;
+    //
+    // try {
+    //     this.setState({ uploading: true });
+    //
+    //     if (!pickerResult.cancelled) {
+    //         uploadResponse = await uploadImageAsync(pickerResult.uri);
+    //         uploadResult = await uploadResponse.json();
+    //         this.setState({ image: uploadResult.location });
+    //     }
+    // } catch (e) {
+    //     console.log({ uploadResponse });
+    //     console.log({ uploadResult });
+    //     console.log({ e });
+    //     alert('Upload failed, sorry :(');
+    // } finally {
+    //     this.setState({ uploading: false });
+    //
 
-      );
-  }
+
+    pickImage = async (): Promise => {
+        const pickerResult = await ImagePicker.launchImageLibraryAsync({
+            base64: true,
+            allowsEditing: true,
+            aspect: [4, 3]
+        });
+
+        return this.setState({image: pickerResult});
+    };
+
+    maybeRenderImage = image => !image
+        ? null
+        : (
+            <View
+                style={styles.container}>
+                <View
+                    style={{
+                        borderTopRightRadius: 3,
+                        borderTopLeftRadius: 3,
+                        overflow: 'hidden',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                    <Image
+                        resizeMode={'contain'}
+                        source={{uri: image.uri}}
+                        style={{
+                            height: '90%',
+                            width: '90%',
+                            shadowColor: 'rgba(0,0,0,1)',
+                            shadowOpacity: 0.2,
+                            shadowOffset: {width: 4, height: 4},
+                            shadowRadius: 5
+                        }}
+                    />
+                </View>
+                <View style={styles.toolbar}>
+                    <Button
+                        onPress={this.upload(image)}
+                        title='Upload'
+                    />
+                    <Button
+                        onPress={() => {
+                            this.setState({image: null});
+                        }}
+                        title='Cancel'
+                    />
+                </View>
+            </View>
+        );
+
+
+    render() {
+        const {image} = this.state;
+
+        return (
+            <View style={styles.container}>
+                <StatusBar barStyle='default'/>
+                {
+                    !image
+                        ? (
+                            <View style={styles.container}>
+                                <Dashboard/>
+                                <Button
+                                    onPress={this.pickImage}
+                                    title='Pick an image from camera roll'
+                                />
+                            </View>
+                        )
+                        : this.maybeRenderImage(image)
+
+                }
+
+            </View>
+
+        );
+    }
 }
 
+function mapStateToProps(state) {
+    return {...state.home};
+}
 
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(actions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
