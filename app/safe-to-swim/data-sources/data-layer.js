@@ -1,9 +1,9 @@
 // @flow
 
 import * as types from '../constants/action-types';
-// const url = 'https://safe-to-swim.herokuapp.com/predict';
-// const url = 'http://10.0.0.4:5000/predict';
-const url = 'http://10.0.0.9:5000/predict';
+const url = 'https://safe-to-swim.herokuapp.com/predict'; // Heroku
+// const url = 'http://10.0.0.4:5000/predict'; // John's Mac
+// const url = 'http://10.0.0.9:5000/predict'; // John's Ubuntu
 
 function postData(url, data) {
     // Default options are marked with *
@@ -24,20 +24,21 @@ function postData(url, data) {
 }
 
 
-export async function upload(dispatch, image) {
+export async function upload(dispatch: any, image: Object) {
     const options = {
         headers: {
             'Content-Type': 'multipart/form-data'
         },
-        method: 'POST'
+        method: 'POST',
+        body: new FormData()
     };
 
-    options.body = new FormData();
-    options.body.append('image', {uri: image.uri, type: 'image/jpeg', name: 'habTest'});
+    options.body.append('image', image);
 
     const rawResponse = await fetch(url, options);
-    const content = await rawResponse.json();
-    console.log(content);
+    const data = await rawResponse.json();
+    dispatch({ type: types.UPLOAD_IMAGE_SUCCESS, data })
+    return data;
 }
 
 //
@@ -72,10 +73,10 @@ export async function getUserStats(dispatch: () => void): void {
     try {
         const value = await AsyncStorage.getItem('@SafeToSwim:key');
         if (value !== null) {
-            dispatch({type: types.GET_USER_STATS_SUCCESS, data: value});
+            dispatch({ type: types.GET_USER_STATS_SUCCESS, data: value });
         }
     } catch (error) {
-        dispatch({type: types.GET_USER_STATS_FAIL});
+        dispatch({ type: types.GET_USER_STATS_FAIL });
     }
 }
 
@@ -83,8 +84,8 @@ export async function getUserStats(dispatch: () => void): void {
 export async function setUserStats(dispatch: () => void, userStats: Object): void {
     try {
         await AsyncStorage.setItem('@SafeToSwim:key', userStats);
-        dispatch({type: types.SET_USER_STATS_SUCCESS, data: userStats});
+        dispatch({ type: types.SET_USER_STATS_SUCCESS, data: userStats });
     } catch (error) {
-        dispatch({type: types.SET_USER_STATS_FAIL});
+        dispatch({ type: types.SET_USER_STATS_FAIL });
     }
 }

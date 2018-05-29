@@ -10,12 +10,12 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import {Permissions, ImagePicker} from 'expo';
+import { Permissions, ImagePicker } from 'expo';
 import PropTypes from 'prop-types';
 import Dashboard from './dashboard';
-import {bindActionCreators} from 'redux';
+import { bindActionCreators } from 'redux';
 import * as actions from './actions';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 const styles = StyleSheet.create({
 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         ...Platform.select({
             ios: {
                 shadowColor: 'black',
-                shadowOffset: {height: -3},
+                shadowOffset: { height: -3 },
                 shadowOpacity: 0.1,
                 shadowRadius: 3
             },
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
 
 class HomeScreen extends React.Component {
 
-    static propTypes = {actions: PropTypes.object};
+    static propTypes = { actions: PropTypes.object };
 
     static navigationOptions = {
         header: null
@@ -128,23 +128,26 @@ class HomeScreen extends React.Component {
 
         this.state = {
             image: null,
-            uploading: false
+            isUploading: false,
+            prediction: null
         };
     }
 
-    async componentWillMount() {
+    async componentDidMount() {
         // await Permissions.askAsync(Permissions.CAMERA);
-        const {status} = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        this.setState({permissionsGranted: status === 'granted'});
+        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        this.setState({ permissionsGranted: status === 'granted' });
     }
 
 
     upload = (image: Object): () => Object => (
-        () => this.props.actions.upload(image)
+        this.setState({ isUploading: true }, this.props.actions.upload(
+            { uri: `data:image/jpeg;base64, ${image.base64}`, name: 'HABTest', type: 'image/jpeg' }
+        )
             .then(results => {
                 console.log(results);
             }).catch(err => console.log(err))
-    );
+        ));
     // let uploadResponse, uploadResult;
     //
     // try {
@@ -172,7 +175,7 @@ class HomeScreen extends React.Component {
             aspect: [4, 3]
         });
 
-        return this.setState({image: pickerResult});
+        return this.setState({ image: pickerResult });
     };
 
     maybeRenderImage = image => !image
@@ -190,25 +193,25 @@ class HomeScreen extends React.Component {
                     }}>
                     <Image
                         resizeMode={'contain'}
-                        source={{uri: 'data:image/jpeg;base64,' + image.base64}}
+                        source={{ uri: 'data:image/jpeg;base64,' + image.base64 }}
                         style={{
                             height: '90%',
                             width: '90%',
                             shadowColor: 'rgba(0,0,0,1)',
                             shadowOpacity: 0.2,
-                            shadowOffset: {width: 4, height: 4},
+                            shadowOffset: { width: 4, height: 4 },
                             shadowRadius: 5
                         }}
                     />
                 </View>
                 <View style={styles.toolbar}>
                     <Button
-                        onPress={this.upload({...image, uri:'data:image/jpeg;base64,' + image.base64})}
+                        onPress={this.upload({ ...image, uri: 'data:image/jpeg;base64,' + image.base64 })}
                         title='Upload'
                     />
                     <Button
                         onPress={() => {
-                            this.setState({image: null});
+                            this.setState({ image: null, isUploading: false });
                         }}
                         title='Cancel'
                     />
@@ -218,34 +221,44 @@ class HomeScreen extends React.Component {
 
 
     render() {
-        const {image} = this.state;
+        const { image, prediction, isUploading } = this.state;
+
+
+        const getContent = () => {
+            switch (true) {
+                case isUploading:
+                    return (<View style={styles.container}><Text>Uploading ...</Text></View>);
+                case Boolean(image):
+                    return this.maybeRenderImage(image);
+
+                case Boolean(prediction):
+                    return (<View style={styles.container}>
+                        <Text>JSON.stringify(predictions)</Text>
+                    </View>);
+                default:
+                    return (<View style={styles.container}>
+                        <Dashboard />
+                        <Button
+                            onPress={this.pickImage}
+                            title='Pick an image from camera roll'
+                        />
+                    </View>)
+            }
+        }
+
 
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='default'/>
-                {
-                    !image
-                        ? (
-                            <View style={styles.container}>
-                                <Dashboard/>
-                                <Button
-                                    onPress={this.pickImage}
-                                    title='Pick an image from camera roll'
-                                />
-                            </View>
-                        )
-                        : this.maybeRenderImage(image)
-
-                }
-
+                <StatusBar barStyle='default' />
+                {this.getContent()}
             </View>
-
         );
     }
 }
-
+    
+        
 function mapStateToProps(state) {
-    return {...state.home};
+    return { ...state.home };
 }
 
 function mapDispatchToProps(dispatch) {
