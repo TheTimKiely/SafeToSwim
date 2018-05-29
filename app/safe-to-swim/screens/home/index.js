@@ -206,7 +206,7 @@ class HomeScreen extends React.Component {
                 </View>
                 <View style={styles.toolbar}>
                     <Button
-                        onPress={this.upload({ ...image, uri: 'data:image/jpeg;base64,' + image.base64 })}
+                        onPress={()=>{this.setState({isUploading:true},()=>this.upload(image))}}
                         title='Upload'
                     />
                     <Button
@@ -227,13 +227,13 @@ class HomeScreen extends React.Component {
         const getContent = () => {
             switch (true) {
                 case isUploading:
-                    return (<View style={styles.container}><Text>Uploading ...</Text></View>);
+                    return (<View style={styles.container}><Text>{Uploading ...}</Text></View>);
                 case Boolean(image):
                     return this.maybeRenderImage(image);
 
                 case Boolean(prediction):
                     return (<View style={styles.container}>
-                        <Text>JSON.stringify(predictions)</Text>
+                        <Text>{JSON.stringify(predictions)}</Text>
                     </View>);
                 default:
                     return (<View style={styles.container}>

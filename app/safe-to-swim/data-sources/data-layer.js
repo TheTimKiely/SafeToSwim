@@ -1,27 +1,27 @@
 // @flow
-
+import {AsyncStorage} from 'react-native'
 import * as types from '../constants/action-types';
 const url = 'https://safe-to-swim.herokuapp.com/predict'; // Heroku
 // const url = 'http://10.0.0.4:5000/predict'; // John's Mac
 // const url = 'http://10.0.0.9:5000/predict'; // John's Ubuntu
 
-function postData(url, data) {
-    // Default options are marked with *
-    return fetch(url, {
-        body: JSON.stringify(data), // must match 'Content-Type' header
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, same-origin, *omit
-        headers: {
-            'user-agent': 'Mozilla/4.0 MDN Example',
-            'content-type': 'multipart/form-data'
-        },
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, cors, *same-origin
-        redirect: 'follow', // manual, *follow, error
-        referrer: 'no-referrer' // *client, no-referrer
-    })
-        .then(response => response.json()); // parses response to JSON
-}
+// function postData(url, data) {
+//     // Default options are marked with *
+//     return fetch(url, {
+//         body: JSON.stringify(data), // must match 'Content-Type' header
+//         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+//         credentials: 'same-origin', // include, same-origin, *omit
+//         headers: {
+//             'user-agent': 'Mozilla/4.0 MDN Example',
+//             'content-type': 'multipart/form-data'
+//         },
+//         method: 'POST', // *GET, POST, PUT, DELETE, etc.
+//         mode: 'cors', // no-cors, cors, *same-origin
+//         redirect: 'follow', // manual, *follow, error
+//         referrer: 'no-referrer' // *client, no-referrer
+//     })
+//         .then(response => response.json()); // parses response to JSON
+// }
 
 
 export async function upload(dispatch: any, image: Object) {
@@ -69,7 +69,7 @@ export async function upload(dispatch: any, image: Object) {
 //     // }).catch(error => console.error(error));
 // }
 
-export async function getUserStats(dispatch: () => void): void {
+export async function getUserStats(dispatch: any => any) {
     try {
         const value = await AsyncStorage.getItem('@SafeToSwim:key');
         if (value !== null) {
@@ -81,7 +81,7 @@ export async function getUserStats(dispatch: () => void): void {
 }
 
 
-export async function setUserStats(dispatch: () => void, userStats: Object): void {
+export async function setUserStats(dispatch: any => any, userStats: Object) {
     try {
         await AsyncStorage.setItem('@SafeToSwim:key', userStats);
         dispatch({ type: types.SET_USER_STATS_SUCCESS, data: userStats });
