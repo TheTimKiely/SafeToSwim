@@ -1,9 +1,9 @@
 // @flow
 
 import * as types from '../constants/action-types';
-
 // const url = 'https://safe-to-swim.herokuapp.com/predict';
-const url = 'http:/10.0.0.4:5000/predict';
+// const url = 'http://10.0.0.4:5000/predict';
+const url = 'http://10.0.0.9:5000/predict';
 
 function postData(url, data) {
     // Default options are marked with *
@@ -24,7 +24,7 @@ function postData(url, data) {
 }
 
 
-export async function upload(dispatch, data) {
+export async function upload(dispatch, image) {
     const options = {
         headers: {
             'Content-Type': 'multipart/form-data'
@@ -33,46 +33,40 @@ export async function upload(dispatch, data) {
     };
 
     options.body = new FormData();
-    options.body.append('image', data);
-    options.body.append('name', 'testfile');
+    options.body.append('image', {uri: image.uri, type: 'image/jpeg', name: 'habTest'});
 
-    const response = await fetch(url, options);
-    response.json().then(responseJson => {
-            console.log(responseJson);
-        }
-    ).catch(error => {
-            console.log(error);
-        }
-    );
+    const rawResponse = await fetch(url, options);
+    const content = await rawResponse.json();
+    console.log(content);
 }
 
-
-export function uploadPhoto(photo: any) {
-    const url = 'https://safe-to-swim.herokuapp.com/predict';
-    const data = new FormData();
-    // data.append('photo', {
-    //     uri: photo.uri,
-    //     type: 'image/jpeg', // or photo.type
-    //     name: 'testPhotoName'
-    // });
-    upload(url, {
-        file: {
-            uri: photo.uri,
-            type: 'image/jpeg',
-            name: 'testPhoto'
-        }
-    })
-        .then(res => console.log('photo uploaded!'))
-        .catch(error => {
-            console.error(error);
-        });
-    // fetch(url, {
-    //     method: 'post',
-    //     body: data
-    // }).then(res => {
-    //     console.log(res)
-    // }).catch(error => console.error(error));
-}
+//
+// export function uploadPhoto(photo: any) {
+//     const url = 'https://safe-to-swim.herokuapp.com/predict';
+//     const data = new FormData();
+//     // data.append('photo', {
+//     //     uri: photo.uri,
+//     //     type: 'image/jpeg', // or photo.type
+//     //     name: 'testPhotoName'
+//     // });
+//     upload(url, {
+//         file: {
+//             uri: photo.uri,
+//             type: 'image/jpeg',
+//             name: 'testPhoto'
+//         }
+//     })
+//         .then(res => console.log('photo uploaded!'))
+//         .catch(error => {
+//             console.error(error);
+//         });
+//     // fetch(url, {
+//     //     method: 'post',
+//     //     body: data
+//     // }).then(res => {
+//     //     console.log(res)
+//     // }).catch(error => console.error(error));
+// }
 
 export async function getUserStats(dispatch: () => void): void {
     try {

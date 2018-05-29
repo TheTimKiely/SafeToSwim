@@ -143,7 +143,7 @@ class HomeScreen extends React.Component {
         () => this.props.actions.upload(image)
             .then(results => {
                 console.log(results);
-            })
+            }).catch(err => console.log(err))
     );
     // let uploadResponse, uploadResult;
     //
@@ -190,7 +190,7 @@ class HomeScreen extends React.Component {
                     }}>
                     <Image
                         resizeMode={'contain'}
-                        source={{uri: image.uri}}
+                        source={{uri: 'data:image/jpeg;base64,' + image.base64}}
                         style={{
                             height: '90%',
                             width: '90%',
@@ -203,7 +203,7 @@ class HomeScreen extends React.Component {
                 </View>
                 <View style={styles.toolbar}>
                     <Button
-                        onPress={this.upload(image)}
+                        onPress={this.upload({...image, uri:'data:image/jpeg;base64,' + image.base64})}
                         title='Upload'
                     />
                     <Button
