@@ -1,5 +1,5 @@
 // @flow
-import {AsyncStorage} from 'react-native'
+import {AsyncStorage} from 'react-native';
 import * as types from '../constants/action-types';
 const url = 'https://safe-to-swim.herokuapp.com/predict'; // Heroku
 // const url = 'http://10.0.0.4:5000/predict'; // John's Mac
