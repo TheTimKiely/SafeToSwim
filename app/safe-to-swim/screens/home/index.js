@@ -184,6 +184,15 @@ class HomeScreen extends React.Component {
         return this.setState({image: pickerResult});
     };
 
+    takePhoto = async () => {
+        let pickerResult = await ImagePicker.launchCameraAsync({
+            base64: true,
+            allowsEditing: true,
+            aspect: [4, 3]
+        });
+        return this.setState({image: pickerResult});
+    };
+
     maybeRenderImage = (image, error) => !image
         ? null
         : (
@@ -236,7 +245,7 @@ class HomeScreen extends React.Component {
         const getContent = () => {
             switch (true) {
                 case isUploading:
-                    return ( <View
+                    return (<View
                         style={[
                             StyleSheet.absoluteFill,
                             {
@@ -245,7 +254,7 @@ class HomeScreen extends React.Component {
                                 justifyContent: 'center'
                             }
                         ]}>
-                        <ActivityIndicator color='#fff' animating={true} size='large' />
+                        <ActivityIndicator color='#fff' animating={true} size='large'/>
                     </View>);
                 case Boolean(prediction):
                     return (<View style={styles.container}>
@@ -265,10 +274,16 @@ class HomeScreen extends React.Component {
                     return (
                         <View style={styles.container}>
                             <Dashboard/>
-                            <Button
-                                onPress={this.pickImage}
-                                title='Pick an image from camera roll'
-                            />
+                            <View style={styles.toolbar}>
+                                <Button
+                                    onPress={this.pickImage}
+                                    title='Pick Image'
+                                />
+                                <Button
+                                    onPress={this.takePhoto}
+                                    title='Take Photo'
+                                />
+                            </View>
                         </View>
                     );
             }
