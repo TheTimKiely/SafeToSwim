@@ -88,11 +88,13 @@ def predict():
 
                 # return the data dictionary as a JSON response
                 response = flask.jsonify(str(data))
+                return response
             except Exception as ex:
                 response = flask.jsonify('SafeToSwim encountered an unexpected error: {}'.format(ex))
-            return response
+                return response
         else:
             response = flask.jsonify('Select a jpg to upload')
+            return response
     else:
         return '''
         <!doctype html>
