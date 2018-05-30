@@ -1,8 +1,8 @@
 import React from 'react';
 import {
+    ActivityIndicator,
     Platform,
     StyleSheet,
-    ActivityIndicator,
     Button,
     Image,
     StatusBar,
@@ -152,6 +152,8 @@ class HomeScreen extends React.Component {
             {uri: `data:image/jpeg;base64, ${image.base64}`, name: 'HABTest', type: 'image/jpeg'}
         )
     );
+
+
     // let uploadResponse, uploadResult;
     //
     // try {
@@ -234,7 +236,17 @@ class HomeScreen extends React.Component {
         const getContent = () => {
             switch (true) {
                 case isUploading:
-                    return (<View style={styles.container}><Text>Uploading ...</Text></View>);
+                    return ( <View
+                        style={[
+                            StyleSheet.absoluteFill,
+                            {
+                                backgroundColor: 'rgba(0,0,0,0.4)',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }
+                        ]}>
+                        <ActivityIndicator color='#fff' animating={true} size='large' />
+                    </View>);
                 case Boolean(prediction):
                     return (<View style={styles.container}>
                         <Text>{JSON.stringify(prediction)}</Text>

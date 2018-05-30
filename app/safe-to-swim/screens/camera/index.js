@@ -129,10 +129,10 @@ export default class CameraScreen extends React.Component {
       });
   }
 
-  getRatios = async () => {
-      const ratios = await this.camera.getSupportedRatios();
-      return ratios;
-  };
+  // getRatios = async () => {
+  //     const ratios = await this.camera.getSupportedRatios();
+  //     return ratios;
+  // };
 
   toggleView() {
       this.setState({
@@ -152,11 +152,11 @@ export default class CameraScreen extends React.Component {
       });
   }
 
-  setRatio(ratio) {
-      this.setState({
-          ratio
-      });
-  }
+  // setRatio(ratio) {
+  //     this.setState({
+  //         ratio
+  //     });
+  // }
 
   toggleWB() {
       this.setState({

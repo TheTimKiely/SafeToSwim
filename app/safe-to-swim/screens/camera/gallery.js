@@ -114,14 +114,10 @@ class GalleryScreen extends React.Component {
     //
     // };
 
-    upload = (src: String) => {
-        return FileSystem.readAsStringAsync(src).then(
-            uri => this.props.actions.upload(
-                {uri, name: 'HABTest', type: 'image/jpeg'}
-            ))
-            .catch(
-                error => console.log(error)
-            );
+    upload = (uri: String) => {
+        return this.props.actions.upload(
+            {uri, name: 'HABTest', type: 'image/jpeg'}
+        );
     }
 
     render() {
