@@ -1,9 +1,9 @@
 // @flow
 import {AsyncStorage} from 'react-native'
 import * as types from '../constants/action-types';
-const url = 'https://safe-to-swim.herokuapp.com/predict'; // Heroku
+// const url = 'https://safe-to-swim.herokuapp.com/predict'; // Heroku
 // const url = 'http://10.0.0.4:5000/predict'; // John's Mac
-// const url = 'http://10.0.0.9:5000/predict'; // John's Ubuntu
+const url = 'http://10.0.0.9:5000/predict'; // John's Ubuntu
 
 // function postData(url, data) {
 //     // Default options are marked with *
@@ -24,7 +24,7 @@ const url = 'https://safe-to-swim.herokuapp.com/predict'; // Heroku
 // }
 
 
-export async function upload(dispatch: any, image: Object) {
+export async function upload(image: Object) {
     const options = {
         headers: {
             'Content-Type': 'multipart/form-data'
@@ -36,9 +36,7 @@ export async function upload(dispatch: any, image: Object) {
     options.body.append('image', image);
 
     const rawResponse = await fetch(url, options);
-    const data = await rawResponse.json();
-    dispatch({ type: types.UPLOAD_IMAGE_SUCCESS, data })
-    return data;
+    return await rawResponse.json();
 }
 
 //

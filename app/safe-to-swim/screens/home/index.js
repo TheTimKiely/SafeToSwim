@@ -10,12 +10,12 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import { Permissions, ImagePicker } from 'expo';
+import {Permissions, ImagePicker} from 'expo';
 import PropTypes from 'prop-types';
 import Dashboard from './dashboard';
-import { bindActionCreators } from 'redux';
+import {bindActionCreators} from 'redux';
 import * as actions from './actions';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 const styles = StyleSheet.create({
 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         ...Platform.select({
             ios: {
                 shadowColor: 'black',
-                shadowOffset: { height: -3 },
+                shadowOffset: {height: -3},
                 shadowOpacity: 0.1,
                 shadowRadius: 3
             },
@@ -117,7 +117,13 @@ const styles = StyleSheet.create({
 
 class HomeScreen extends React.Component {
 
-    static propTypes = { actions: PropTypes.object };
+    static propTypes = {
+        actions: PropTypes.object,
+        error: PropTypes.object,
+        prediction: PropTypes.object,
+        isUploading: PropTypes.bool
+    };
+
 
     static navigationOptions = {
         header: null
@@ -128,26 +134,24 @@ class HomeScreen extends React.Component {
 
         this.state = {
             image: null,
-            isUploading: false,
-            prediction: null
+            permissionsGranted: false,
+            permissionsError: null
         };
     }
 
     async componentDidMount() {
         // await Permissions.askAsync(Permissions.CAMERA);
-        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        this.setState({ permissionsGranted: status === 'granted' });
+        Permissions.askAsync(Permissions.CAMERA_ROLL)
+            .then(({status}) => this.setState({permissionsGranted: status === 'granted'}))
+            .catch((error) => this.setState({permissionsError: error}));
     }
 
 
     upload = (image: Object): () => Object => (
-        this.setState({ isUploading: true }, this.props.actions.upload(
-            { uri: `data:image/jpeg;base64, ${image.base64}`, name: 'HABTest', type: 'image/jpeg' }
+        this.props.actions.upload(
+            {uri: `data:image/jpeg;base64, ${image.base64}`, name: 'HABTest', type: 'image/jpeg'}
         )
-            .then(results => {
-                console.log(results);
-            }).catch(err => console.log(err))
-        ));
+    );
     // let uploadResponse, uploadResult;
     //
     // try {
@@ -175,10 +179,10 @@ class HomeScreen extends React.Component {
             aspect: [4, 3]
         });
 
-        return this.setState({ image: pickerResult });
+        return this.setState({image: pickerResult});
     };
 
-    maybeRenderImage = image => !image
+    maybeRenderImage = (image, error) => !image
         ? null
         : (
             <View
@@ -193,25 +197,28 @@ class HomeScreen extends React.Component {
                     }}>
                     <Image
                         resizeMode={'contain'}
-                        source={{ uri: 'data:image/jpeg;base64,' + image.base64 }}
+                        source={{uri: `data:image/jpeg;base64,${ image.base64}`}}
                         style={{
                             height: '90%',
                             width: '90%',
                             shadowColor: 'rgba(0,0,0,1)',
                             shadowOpacity: 0.2,
-                            shadowOffset: { width: 4, height: 4 },
+                            shadowOffset: {width: 4, height: 4},
                             shadowRadius: 5
                         }}
                     />
+                    <Text>{JSON.stringify(error)}</Text>
                 </View>
                 <View style={styles.toolbar}>
                     <Button
-                        onPress={()=>{this.setState({isUploading:true},()=>this.upload(image))}}
+                        onPress={() => {
+                            this.setState({isUploading: true}, () => this.upload(image));
+                        }}
                         title='Upload'
                     />
                     <Button
                         onPress={() => {
-                            this.setState({ image: null, isUploading: false });
+                            this.setState({image: null, isUploading: false});
                         }}
                         title='Cancel'
                     />
@@ -221,44 +228,53 @@ class HomeScreen extends React.Component {
 
 
     render() {
-        const { image, prediction, isUploading } = this.state;
-
+        const {image} = this.state;
+        const {error, prediction, isUploading} = this.props;
 
         const getContent = () => {
             switch (true) {
                 case isUploading:
-                    return (<View style={styles.container}><Text>{Uploading ...}</Text></View>);
-                case Boolean(image):
-                    return this.maybeRenderImage(image);
-
+                    return (<View style={styles.container}><Text>Uploading ...</Text></View>);
                 case Boolean(prediction):
                     return (<View style={styles.container}>
-                        <Text>{JSON.stringify(predictions)}</Text>
-                    </View>);
-                default:
-                    return (<View style={styles.container}>
-                        <Dashboard />
+                        <Text>{JSON.stringify(prediction)}</Text>
                         <Button
-                            onPress={this.pickImage}
-                            title='Pick an image from camera roll'
+                            onPress={() => this.setState({image: null}, this.props.actions.clearPrediction)}
+                            title='Continue'
                         />
-                    </View>)
+                    </View>);
+                case Boolean(error) :
+                    return (<View style={styles.container}>
+                        <Text>{JSON.stringify(error)}</Text>
+                    </View>);
+                case Boolean(image):
+                    return this.maybeRenderImage(image, error);
+                default:
+                    return (
+                        <View style={styles.container}>
+                            <Dashboard/>
+                            <Button
+                                onPress={this.pickImage}
+                                title='Pick an image from camera roll'
+                            />
+                        </View>
+                    );
             }
-        }
+        };
 
 
         return (
             <View style={styles.container}>
-                <StatusBar barStyle='default' />
-                {this.getContent()}
+                <StatusBar barStyle='default'/>
+                {getContent()}
             </View>
         );
     }
 }
-    
-        
+
+
 function mapStateToProps(state) {
-    return { ...state.home };
+    return {...state.home};
 }
 
 function mapDispatchToProps(dispatch) {

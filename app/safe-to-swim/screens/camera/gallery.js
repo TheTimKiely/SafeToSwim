@@ -1,10 +1,11 @@
 import React from 'react';
-import {Alert, Image, TouchableHighlight, StyleSheet, View, TouchableOpacity, Text, ScrollView} from 'react-native';
+import {Button, Image, TouchableHighlight, StyleSheet, View, TouchableOpacity, Text, ScrollView} from 'react-native';
 import {FileSystem} from 'expo';
 import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import * as actions from './actions';
+
 const pictureSize = 150;
 const styles = StyleSheet.create({
     container: {
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         borderColor: '#FFD700',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+        backgroundColor: 'rgba(255,255,255,0)'
     },
     faceText: {
         color: '#FFD700',
@@ -51,12 +52,8 @@ const styles = StyleSheet.create({
         margin: 2,
         fontSize: 10,
         backgroundColor: 'transparent'
-    },
-    backButton: {
-        padding: 20,
-        marginBottom: 4,
-        backgroundColor: 'indianred'
     }
+
 });
 
 
@@ -75,79 +72,85 @@ class GalleryScreen extends React.Component {
             photos: []
         };
     }
+
     // _mounted = false;
 
     componentDidMount() {
-        // this._mounted = true;
         FileSystem.readDirectoryAsync(`${FileSystem.documentDirectory }photos`).then(photos => {
-            //  if (this._mounted) {
             this.setState(
                 {
                     photos
                 }
-                // , this.detectFaces
             );
-            // }
         });
     }
 
-    componentWillUnmount() {
-        // this._mounted = false;
+
+    // getImageDimensions = ({width, height}) => {
+    //     if (width > height) {
+    //         const scaledHeight = pictureSize * height / width;
+    //         return {
+    //             width: pictureSize,
+    //             height: scaledHeight,
+    //
+    //             scaleX: pictureSize / width,
+    //             scaleY: scaledHeight / height,
+    //
+    //             offsetX: 0,
+    //             offsetY: (pictureSize - scaledHeight) / 2
+    //         };
+    //     }
+    //     const scaledWidth = pictureSize * width / height;
+    //     return {
+    //         width: scaledWidth,
+    //         height: pictureSize,
+    //
+    //         scaleX: scaledWidth / width,
+    //         scaleY: pictureSize / height,
+    //
+    //         offsetX: (pictureSize - scaledWidth) / 2,
+    //         offsetY: 0
+    //     };
+    //
+    // };
+
+    upload = (src: String) => {
+        return FileSystem.readAsStringAsync(src).then(
+            uri => this.props.actions.upload(
+                {uri, name: 'HABTest', type: 'image/jpeg'}
+            ))
+            .catch(
+                error => console.log(error)
+            );
     }
 
-  getImageDimensions = ({width, height}) => {
-      if (width > height) {
-          const scaledHeight = pictureSize * height / width;
-          return {
-              width: pictureSize,
-              height: scaledHeight,
+    render() {
+        return (
+            <View style={styles.container}>
+                <Button
+                    onPress={this.props.onPress}
+                    title='Back'/>
+                <ScrollView contentComponentStyle={{flex: 1}}>
+                    <View style={styles.pictures}>
+                        {this.state.photos.map((photo, i) => (
+                            <TouchableHighlight
+                                onPress={() => this.upload(`${FileSystem.documentDirectory}photos/${photo}`)}
+                                style={styles.pictureWrapper}
+                                key={i}>
+                                <Image
+                                    style={styles.picture}
+                                    source={{
+                                        uri: `${FileSystem.documentDirectory}photos/${photo}`
+                                    }}
+                                />
 
-              scaleX: pictureSize / width,
-              scaleY: scaledHeight / height,
-
-              offsetX: 0,
-              offsetY: (pictureSize - scaledHeight) / 2
-          };
-      }
-      const scaledWidth = pictureSize * width / height;
-      return {
-          width: scaledWidth,
-          height: pictureSize,
-
-          scaleX: scaledWidth / width,
-          scaleY: pictureSize / height,
-
-          offsetX: (pictureSize - scaledWidth) / 2,
-          offsetY: 0
-      };
-
-  };
- 
-  render() {
-      return (
-          <View style={styles.container}>
-              <TouchableOpacity style={styles.backButton} onPress={this.props.onPress}>
-                  <Text>Back</Text>
-              </TouchableOpacity>
-              <ScrollView contentComponentStyle={{flex: 1}}>
-                  <View style={styles.pictures}>
-                      {this.state.photos.map(photoUri => (
-                          <TouchableHighlight onPress={() => this.props.actions.uploadPhoto(photoUri)} style={styles.pictureWrapper} key={photoUri}>
-                              <Image
-                                  key={photoUri}
-                                  style={styles.picture}
-                                  source={{
-                                      uri: `${FileSystem.documentDirectory}photos/${photoUri}`
-                                  }}
-                              />
-                    
-                          </TouchableHighlight>
-                      ))}
-                  </View>
-              </ScrollView>
-          </View>
-      );
-  }
+                            </TouchableHighlight>
+                        ))}
+                    </View>
+                </ScrollView>
+            </View>
+        );
+    }
 }
 
 
