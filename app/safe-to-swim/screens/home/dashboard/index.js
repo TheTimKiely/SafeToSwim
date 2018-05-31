@@ -65,7 +65,7 @@ class Dashboard extends React.Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.bigText}>HAB Check</Text>
+                <Text style={styles.bigText}>Safe To Swim</Text>
                 <Text style={styles.text}>Upload an image to check for the presence of harmful algal blooms.</Text>
                 <Text style={styles.warning}>Warning: This is very beta software. Do not rely on this for an accurate water quality analysis.</Text>
             </View>

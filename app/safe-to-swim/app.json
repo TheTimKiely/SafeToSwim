@@ -1,7 +1,7 @@
 {
     "expo": {
         "name": "safe-to-swim",
-        "description": "A better way to collect and analyze data on Harmful Algal Blooms",
+        "description": "A better way to collect and analyze harmful algal bloom data.",
         "slug": "safe-to-swim",
         "privacy": "public",
         "sdkVersion": "26.0.0",
