@@ -37,7 +37,14 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 24,
         color: '#2e78b7',
-        textAlign: 'center'
+        textAlign: 'justify',
+        margin: 10
+    },
+    warning: {
+        fontSize: 20,
+        color: '#AA8888',
+        textAlign: 'justify',
+        margin: 10
     }
 });
 
@@ -58,9 +65,9 @@ class Dashboard extends React.Component {
 
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>You have uploaded</Text>
-                <Text style={styles.bigText}>{this.props.uploads}</Text>
-                <Text style={styles.text}>Photos</Text>
+                <Text style={styles.bigText}>HAB Check</Text>
+                <Text style={styles.text}>Upload an image to check for the presence of a harmful bacteria bloom.</Text>
+                <Text style={styles.warning}>Warning: This is very beta software. Do not rely on this for an accurate water quality analysis.</Text>
             </View>
         );
     }

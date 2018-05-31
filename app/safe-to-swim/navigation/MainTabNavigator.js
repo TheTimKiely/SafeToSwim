@@ -6,7 +6,7 @@ import {TabNavigator, TabBarBottom} from 'react-navigation';
 import Colors from '../constants/Colors';
 
 import HomeScreen from '../screens/home/';
-import CameraScreen from '../screens/camera/';
+// import CameraScreen from '../screens/camera/';
 import SettingsScreen from '../screens/settings/';
 
 export default TabNavigator({
@@ -28,24 +28,26 @@ export default TabNavigator({
                 case 'Home':
                     iconName =
                         Platform.OS === 'ios'
-                            ? `ios-information-circle${focused ? '' : '-outline'}`
-                            : 'md-information-circle';
+                            ? `ios-camera${focused ? '' : '-outline'}`
+                            : 'md-camera';
                     break;
-                case 'Camera':
-                    iconName = Platform.OS === 'ios' ? `ios-camera${focused ? '' : '-outline'}` : 'md-camera';
-                    break;
+                // case 'Camera':
+                //     iconName = Platform.OS === 'ios' ? `ios-camera${focused ? '' : '-outline'}` : 'md-camera';
+                //     break;
                 case 'Settings':
                     iconName =
-                        Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options';
+                        Platform.OS === 'ios'
+                            ? `ios-options${focused ? '' : '-outline'}`
+                            : 'md-options';
+                    break;
             }
-            return ( <
-                Ionicons name = {iconName}
-                size = {28}
-                style = {
-                    {marginBottom: -3}
-                }
-                color = {focused ? Colors.tabIconSelected : Colors.tabIconDefault}
-            />
+            return (
+                <
+                    Ionicons name={iconName}
+                    size={28}
+                    style={{marginBottom: -3}}
+                    color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+                />
             );
         }
     }),

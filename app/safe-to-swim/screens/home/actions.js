@@ -15,3 +15,11 @@ export function upload(image: Object): any => any {
 export function clearPrediction() {
     return {type: types.CLEAR_PREDICTION};
 }
+
+export function setUserStats(userStats: Object): any => any {
+    return (dispatch: any) => {
+        dataLayer.setUserStats(userStats)
+            .then( data => dispatch({type: types.SET_USER_STATS_SUCCESS, data}))
+            .catch(error => dispatch({type: types.SET_USER_STATS_FAIL, error}));
+    };
+}
