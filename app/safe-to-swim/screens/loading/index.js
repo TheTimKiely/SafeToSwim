@@ -3,11 +3,17 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import RootNavigation from './navigation/RootNavigation';
+import PropTypes from 'prop-types';
 
 class LoadingScreen extends React.Component {
+
+
+  static propTypes={skipLoadingScreen: PropTypes.bool};
+
   state = {
-    isLoadingComplete: false,
+    isLoadingComplete: false
   };
+
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {

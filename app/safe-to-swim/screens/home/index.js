@@ -34,84 +34,17 @@ const styles = StyleSheet.create({
     contentContainer: {
         paddingTop: 30
     },
-    welcomeContainer: {
-        alignItems: 'center',
-        marginTop: 10,
-        marginBottom: 20
-    },
-    welcomeImage: {
-        width: 100,
-        height: 80,
-        resizeMode: 'contain',
-        marginTop: 3,
-        marginLeft: -10
-    },
-    getStartedContainer: {
-        alignItems: 'center',
-        marginHorizontal: 50
-    },
-    homeScreenFilename: {
-        marginVertical: 7
-    },
-    codeHighlightText: {
-        color: 'rgba(96,100,109, 0.8)'
-    },
-    codeHighlightContainer: {
-        backgroundColor: 'rgba(0,0,0,0.05)',
-        borderRadius: 3,
-        paddingHorizontal: 4
-    },
-    getStartedText: {
-        fontSize: 17,
-        color: 'rgba(96,100,109, 1)',
-        lineHeight: 24,
-        textAlign: 'center'
-    },
-    tabBarInfoContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        ...Platform.select({
-            ios: {
-                shadowColor: 'black',
-                shadowOffset: {height: -3},
-                shadowOpacity: 0.1,
-                shadowRadius: 3
-            },
-            android: {
-                elevation: 20
-            }
-        }),
-        alignItems: 'center',
-        backgroundColor: '#fbfbfb',
-        paddingVertical: 20
-    },
-    tabBarInfoText: {
-        fontSize: 17,
-        color: 'rgba(96,100,109, 1)',
-        textAlign: 'center'
-    },
-    navigationFilename: {
-        marginTop: 5
-    },
-    helpContainer: {
-        marginTop: 15,
-        alignItems: 'center'
-    },
-
-    helpLink: {
-        paddingVertical: 15
-    },
-    helpLinkText: {
-        fontSize: 14,
-        color: '#2e78b7'
-    },
     toolbar: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        height: 50
+        height: 50,
+        backgroundColor: '#EEE',
+        paddingRight: 10,
+        paddingLeft: 10
+    },
+    toolbarText: {
+        margin: 10, height: 30, fontSize: 20, color: '#42aaf4'
     }
 });
 
@@ -120,13 +53,13 @@ class HomeScreen extends React.Component {
     static propTypes = {
         actions: PropTypes.object,
         error: PropTypes.object,
-        prediction: PropTypes.object,
+        prediction: PropTypes.string,
         isUploading: PropTypes.bool
     };
 
 
     static navigationOptions = {
-        header: null
+        title: 'Home'
     };
 
     constructor(props: Object) {
@@ -185,7 +118,7 @@ class HomeScreen extends React.Component {
     };
 
     takePhoto = async () => {
-        let pickerResult = await ImagePicker.launchCameraAsync({
+        const pickerResult = await ImagePicker.launchCameraAsync({
             base64: true,
             allowsEditing: true,
             aspect: [4, 3]
@@ -193,49 +126,50 @@ class HomeScreen extends React.Component {
         return this.setState({image: pickerResult});
     };
 
-    maybeRenderImage = (image, error) => !image
-        ? null
-        : (
+    maybeRenderImage = (image) => (
+        <View style={styles.container}>
             <View
-                style={styles.container}>
-                <View
+                style={{
+                    borderTopRightRadius: 3,
+                    borderTopLeftRadius: 3,
+                    overflow: 'hidden',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                <Image
+                    resizeMode={'contain'}
+                    source={{uri: `data:image/jpeg;base64,${ image.base64}`}}
                     style={{
-                        borderTopRightRadius: 3,
-                        borderTopLeftRadius: 3,
-                        overflow: 'hidden',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }}>
-                    <Image
-                        resizeMode={'contain'}
-                        source={{uri: `data:image/jpeg;base64,${ image.base64}`}}
-                        style={{
-                            height: '90%',
-                            width: '90%',
-                            shadowColor: 'rgba(0,0,0,1)',
-                            shadowOpacity: 0.2,
-                            shadowOffset: {width: 4, height: 4},
-                            shadowRadius: 5
-                        }}
-                    />
-                    <Text>{JSON.stringify(error)}</Text>
-                </View>
+                        height: '90%',
+                        width: '90%',
+                        shadowColor: 'rgba(0,0,0,1)',
+                        shadowOpacity: 0.2,
+                        shadowOffset: {width: 4, height: 4},
+                        shadowRadius: 5
+                    }}
+                />
+
+            </View>
+            <View style={{height: 50}}>
                 <View style={styles.toolbar}>
-                    <Button
+                    <TouchableOpacity style={{height: 50}}
                         onPress={() => {
                             this.setState({isUploading: true}, () => this.upload(image));
                         }}
-                        title='Upload'
-                    />
-                    <Button
+                    >
+                        <Text style={styles.toolbarText}>Upload</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={{height: 50}}
                         onPress={() => {
                             this.setState({image: null, isUploading: false});
-                        }}
-                        title='Cancel'
-                    />
+                        }}>
+                        <Text style={styles.toolbarText}>Cancel</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
-        );
+        </View>
+    );
 
 
     render() {
@@ -245,25 +179,37 @@ class HomeScreen extends React.Component {
         const getContent = () => {
             switch (true) {
                 case isUploading:
-                    return (<View
-                        style={[
-                            StyleSheet.absoluteFill,
-                            {
-                                backgroundColor: 'rgba(0,0,0,0.4)',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                            }
-                        ]}>
-                        <ActivityIndicator color='#fff' animating={true} size='large'/>
-                    </View>);
+                    return (
+                        <View
+                            style={[
+                                StyleSheet.absoluteFill,
+                                {
+                                    backgroundColor: '#FFF',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }
+                            ]}>
+                            <ActivityIndicator color='#333' animating={true} size='large'/>
+                            <Text style={{fontSize: 30, marginTop: 20}}>Uploading</Text>
+                        </View>
+                    );
                 case Boolean(prediction):
-                    return (<View style={styles.container}>
-                        <Text>{JSON.stringify(prediction)}</Text>
-                        <Button
-                            onPress={() => this.setState({image: null}, this.props.actions.clearPrediction)}
-                            title='Continue'
-                        />
-                    </View>);
+                    const myPrediction = JSON.parse(prediction.replace(/'/g, '"').replace(/True/g, 'true').replace(/False/g, 'false'));
+                    return (
+                        <View style={styles.container}>
+                            <View>
+                                <Text style={{fontSize: 30, textAlign:'center', marginBottom: 50}}>{myPrediction.prediction}</Text>
+                            </View>
+                            <View style={{height: 50}}>
+                                <View style={styles.toolbar}>
+                                    <TouchableOpacity style={{height: 50, width: '100%', alignItems:'center'}}
+                                        onPress={() => this.setState({image: null}, this.props.actions.clearPrediction)}>
+                                        <Text style={styles.toolbarText}>Continue</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    );
                 case Boolean(error) :
                     return (<View style={styles.container}>
                         <Text>{JSON.stringify(error)}</Text>
@@ -274,15 +220,19 @@ class HomeScreen extends React.Component {
                     return (
                         <View style={styles.container}>
                             <Dashboard/>
-                            <View style={styles.toolbar}>
-                                <Button
-                                    onPress={this.pickImage}
-                                    title='Pick Image'
-                                />
-                                <Button
-                                    onPress={this.takePhoto}
-                                    title='Take Photo'
-                                />
+                            <View style={{height: 50}}>
+                                <View style={styles.toolbar}>
+                                    <TouchableOpacity style={{height: 50}}
+                                        onPress={this.pickImage}
+                                    >
+                                        <Text style={styles.toolbarText}>Pick Photo</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={{height: 50}}
+                                        onPress={this.takePhoto}
+                                    >
+                                        <Text style={styles.toolbarText}>Take Photo</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     );
@@ -290,12 +240,9 @@ class HomeScreen extends React.Component {
         };
 
 
-        return (
-            <View style={styles.container}>
-                <StatusBar barStyle='default'/>
-                {getContent()}
-            </View>
-        );
+        return getContent();
+
+
     }
 }
 

@@ -1,6 +1,7 @@
 // @flow
 import {AsyncStorage} from 'react-native';
 import * as types from '../constants/action-types';
+
 const url = 'https://safe-to-swim.herokuapp.com/predict'; // Heroku
 // const url = 'http://10.0.0.4:5000/predict'; // John's Mac
 // const url = 'http://10.0.0.9:5000/predict'; // John's Ubuntu
@@ -71,19 +72,14 @@ export async function getUserStats(dispatch: any => any) {
     try {
         const value = await AsyncStorage.getItem('@SafeToSwim:key');
         if (value !== null) {
-            dispatch({ type: types.GET_USER_STATS_SUCCESS, data: value });
+            dispatch({type: types.GET_USER_STATS_SUCCESS, data: value});
         }
     } catch (error) {
-        dispatch({ type: types.GET_USER_STATS_FAIL });
+        dispatch({type: types.GET_USER_STATS_FAIL});
     }
 }
 
 
-export async function setUserStats(dispatch: any => any, userStats: Object) {
-    try {
-        await AsyncStorage.setItem('@SafeToSwim:key', userStats);
-        dispatch({ type: types.SET_USER_STATS_SUCCESS, data: userStats });
-    } catch (error) {
-        dispatch({ type: types.SET_USER_STATS_FAIL });
-    }
+export function setUserStats(dispatch: any => any, userStats: Object) {
+    return AsyncStorage.setItem('@SafeToSwim:key', userStats);
 }
